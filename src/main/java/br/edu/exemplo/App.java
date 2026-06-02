@@ -1,6 +1,13 @@
 package br.edu.exemplo;
 
+/**
+ * Classe de entrada da aplicacao.
+ *
+ * <p>Ela simula o uso da classe Aluno como aconteceria em uma pequena parte de
+ * um sistema academico.</p>
+ */
 public class App {
+
     public static void main(String[] args) {
         System.out.println("[LOG] Iniciando demonstracao da classe Aluno.");
 
@@ -15,9 +22,7 @@ public class App {
         System.out.println("[LOG] Nome: " + aluno.getNome());
         System.out.println("[LOG] Matricula: " + aluno.getMatricula());
         System.out.println("[LOG] Notas: " + aluno.getNotas());
-
-        double media = aluno.calcularMedia();
-        System.out.println("[LOG] Media final: " + media);
+        System.out.println("[LOG] Media final: " + aluno.calcularMedia());
         System.out.println("[LOG] Aprovado? " + aluno.estaAprovado());
 
         System.out.println("[LOG] Demonstracao finalizada.");
