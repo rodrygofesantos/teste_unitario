@@ -3,6 +3,7 @@ package br.edu.exemplo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,8 +31,15 @@ class AlunoTest {
     void deveCriarAlunoComNomeEMatricula() {
         System.out.println("[TESTE] Verificando se nome e matricula foram armazenados corretamente.");
 
-        assertEquals("Carlos Souza", aluno.getNome());
-        assertEquals("CC2026002", aluno.getMatricula());
+        // Arrange: o metodo @BeforeEach ja preparou o objeto Aluno usado neste teste.
+
+        // Act: consultamos o estado do objeto para observar o resultado da criacao.
+        String nome = aluno.getNome();
+        String matricula = aluno.getMatricula();
+
+        // Assert: confirmamos se o objeto guardou exatamente os dados esperados.
+        assertEquals("Carlos Souza", nome);
+        assertEquals("CC2026002", matricula);
     }
 
     @Test
@@ -39,12 +47,18 @@ class AlunoTest {
     void deveRegistrarNotasValidas() {
         System.out.println("[TESTE] Registrando duas notas validas.");
 
-        aluno.registrarNota(8.0);
-        aluno.registrarNota(9.0);
+        // Arrange: definimos os dados de entrada que serao usados no comportamento testado.
+        double primeiraNota = 8.0;
+        double segundaNota = 9.0;
 
+        // Act: executamos o comportamento principal do teste, registrando as notas.
+        aluno.registrarNota(primeiraNota);
+        aluno.registrarNota(segundaNota);
+
+        // Assert: verificamos se as notas foram armazenadas na quantidade e ordem esperadas.
         assertEquals(2, aluno.getNotas().size());
-        assertEquals(8.0, aluno.getNotas().get(0));
-        assertEquals(9.0, aluno.getNotas().get(1));
+        assertEquals(primeiraNota, aluno.getNotas().get(0));
+        assertEquals(segundaNota, aluno.getNotas().get(1));
     }
 
     @Test
@@ -52,11 +66,16 @@ class AlunoTest {
     void deveCalcularMediaDasNotas() {
         System.out.println("[TESTE] Calculando a media de tres notas.");
 
+        // Arrange: registramos notas conhecidas para que a media esperada seja previsivel.
         aluno.registrarNota(6.0);
         aluno.registrarNota(8.0);
         aluno.registrarNota(10.0);
 
-        assertEquals(8.0, aluno.calcularMedia());
+        // Act: chamamos o metodo que calcula a media do aluno.
+        double media = aluno.calcularMedia();
+
+        // Assert: comparamos a media calculada com o resultado esperado.
+        assertEquals(8.0, media);
     }
 
     @Test
@@ -64,10 +83,15 @@ class AlunoTest {
     void deveAprovarAlunoComMediaMaiorOuIgualASete() {
         System.out.println("[TESTE] Verificando regra de aprovacao.");
 
+        // Arrange: registramos notas que produzem media maior ou igual a 7.0.
         aluno.registrarNota(7.0);
         aluno.registrarNota(8.0);
 
-        assertTrue(aluno.estaAprovado());
+        // Act: executamos a regra de negocio que verifica a aprovacao.
+        boolean aprovado = aluno.estaAprovado();
+
+        // Assert: confirmamos que o resultado da regra foi verdadeiro.
+        assertTrue(aprovado);
     }
 
     @Test
@@ -75,10 +99,15 @@ class AlunoTest {
     void deveReprovarAlunoComMediaMenorQueSete() {
         System.out.println("[TESTE] Verificando regra de reprovacao.");
 
+        // Arrange: registramos notas que produzem media menor que 7.0.
         aluno.registrarNota(5.0);
         aluno.registrarNota(6.0);
 
-        assertFalse(aluno.estaAprovado());
+        // Act: executamos a regra de negocio que verifica a aprovacao.
+        boolean aprovado = aluno.estaAprovado();
+
+        // Assert: confirmamos que o aluno nao foi aprovado.
+        assertFalse(aprovado);
     }
 
     @Test
@@ -86,7 +115,14 @@ class AlunoTest {
     void naoDeveAceitarNotaMenorQueZero() {
         System.out.println("[TESTE] Tentando registrar uma nota invalida menor que zero.");
 
-        assertThrows(IllegalArgumentException.class, () -> aluno.registrarNota(-1.0));
+        // Arrange: preparamos uma nota invalida para testar a protecao da classe.
+        double notaInvalida = -1.0;
+
+        // Act: descrevemos a acao que deve falhar quando for executada pelo JUnit.
+        Executable registrarNotaInvalida = () -> aluno.registrarNota(notaInvalida);
+
+        // Assert: verificamos se a classe lancou a excecao esperada.
+        assertThrows(IllegalArgumentException.class, registrarNotaInvalida);
     }
 
     @Test
@@ -94,7 +130,14 @@ class AlunoTest {
     void naoDeveAceitarNotaMaiorQueDez() {
         System.out.println("[TESTE] Tentando registrar uma nota invalida maior que dez.");
 
-        assertThrows(IllegalArgumentException.class, () -> aluno.registrarNota(11.0));
+        // Arrange: preparamos uma nota acima do limite permitido.
+        double notaInvalida = 11.0;
+
+        // Act: descrevemos a tentativa de registrar a nota invalida.
+        Executable registrarNotaInvalida = () -> aluno.registrarNota(notaInvalida);
+
+        // Assert: verificamos se a validacao impediu o registro da nota.
+        assertThrows(IllegalArgumentException.class, registrarNotaInvalida);
     }
 
     @Test
@@ -102,6 +145,14 @@ class AlunoTest {
     void naoDeveCriarAlunoSemNome() {
         System.out.println("[TESTE] Tentando criar aluno sem nome.");
 
-        assertThrows(IllegalArgumentException.class, () -> new Aluno(" ", "CC2026003"));
+        // Arrange: preparamos dados invalidos para criar um aluno sem nome.
+        String nomeInvalido = " ";
+        String matriculaValida = "CC2026003";
+
+        // Act: descrevemos a criacao do aluno invalido, sem executar diretamente aqui.
+        Executable criarAlunoSemNome = () -> new Aluno(nomeInvalido, matriculaValida);
+
+        // Assert: verificamos se o construtor bloqueou a criacao do objeto invalido.
+        assertThrows(IllegalArgumentException.class, criarAlunoSemNome);
     }
 }
