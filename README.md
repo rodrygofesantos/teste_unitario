@@ -1,6 +1,6 @@
 # Tutorial: Classe `Aluno` em Java com JUnit
 
-Material didatico para a disciplina **Construcao e Arquitetura de Sistemas** do curso de **Ciencia da Computacao**.
+Material didatico para a disciplina **Construção e Arquitetura de Sistemas** do curso de **Ciencia da Computação** do Unipac - Barbacena.
 
 Este projeto apresenta uma classe simples chamada `Aluno`, demonstrando orientacao a objetos, encapsulamento, validacoes, logs no console e testes unitarios com JUnit.
 
