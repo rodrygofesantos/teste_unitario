@@ -1,26 +1,65 @@
-# Tutorial: Classe `Aluno` em Java com JUnit
+# Classe `Aluno` em Java com Testes Unitários JUnit
 
-Material didatico para a disciplina **Construção e Arquitetura de Sistemas** do curso de **Ciencia da Computação** do Unipac - Barbacena.
+Material de apoio para a disciplina **Construção e Arquitetura de Sistemas** do curso de **Ciência da Computação**.
 
-Este projeto apresenta uma classe simples chamada `Aluno`, demonstrando orientacao a objetos, encapsulamento, validacoes, logs no console e testes unitarios com JUnit.
+Este repositório apresenta um exemplo didático e completo de uma classe Java simples, usando a entidade `Aluno` para introduzir conceitos essenciais de **orientação a objetos**, **encapsulamento**, **regras de negócio**, **logs de execução** e **testes unitários com JUnit**.
 
-## Objetivos da aula
+O objetivo não é apenas mostrar código funcionando. O objetivo é formar raciocínio arquitetural: cada classe deve ter uma responsabilidade clara, seus dados internos devem ser protegidos, suas regras devem ser verificáveis e seu comportamento deve poder ser testado.
 
-Ao final deste tutorial, o aluno deve conseguir:
+## 1. Visão Geral da Aula
 
-- Entender a diferenca entre classe e objeto.
-- Identificar atributos e metodos em uma classe Java.
-- Compreender por que usamos encapsulamento.
-- Criar objetos usando construtores.
-- Validar dados de entrada.
-- Ler logs simples no console.
-- Escrever e interpretar testes unitarios com JUnit.
+### Tema central
 
-## Estrutura do projeto
+Construção de uma classe simples em Java, com validações e testes automatizados.
+
+### Problema trabalhado
+
+Como representar um aluno em um sistema acadêmico simples?
+
+A classe `Aluno` precisa:
+
+- Guardar nome e matrícula.
+- Registrar notas válidas.
+- Calcular a média.
+- Informar se o aluno está aprovado ou reprovado.
+- Proteger seu estado interno contra alterações indevidas.
+- Ter seu comportamento validado por testes unitários.
+
+### Competências desenvolvidas
+
+Ao final da aula, o estudante deverá ser capaz de:
+
+- Diferenciar classe, objeto, atributo e método.
+- Explicar o papel do construtor na criação de objetos válidos.
+- Aplicar encapsulamento com atributos privados.
+- Implementar validações simples em uma classe de domínio.
+- Interpretar logs de execução.
+- Escrever testes unitários usando JUnit.
+- Identificar as etapas **Arrange**, **Act** e **Assert** em um teste.
+- Relacionar decisões simples de código com princípios de arquitetura de sistemas.
+
+## 2. Pré-Requisitos
+
+Para acompanhar a aula, recomenda-se que o aluno já tenha noções básicas de:
+
+- Sintaxe básica da linguagem Java.
+- Criação de classes e métodos.
+- Tipos primitivos, como `double` e `boolean`.
+- Uso básico de listas em Java.
+- Execução de programas pela IDE ou terminal.
+
+Ferramentas recomendadas:
+
+- Java 17 ou superior.
+- Maven.
+- IDE Java, como IntelliJ IDEA, Eclipse, NetBeans ou VS Code.
+
+## 3. Estrutura do Projeto
 
 ```text
 classe-aluno-junit/
 ├── pom.xml
+├── README.md
 ├── src/
 │   ├── main/
 │   │   └── java/
@@ -37,42 +76,69 @@ classe-aluno-junit/
 │                       └── AlunoTest.java
 ```
 
-## 1. O que e uma classe?
+### Responsabilidade de cada arquivo
 
-Uma classe e um molde.
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `Aluno.java` | Representa o aluno e concentra regras relacionadas a notas e aprovação. |
+| `App.java` | Demonstra o uso da classe `Aluno` em uma execução simples. |
+| `AlunoTest.java` | Valida automaticamente o comportamento da classe `Aluno`. |
+| `pom.xml` | Configura o projeto Maven e a dependência do JUnit. |
+| `README.md` | Serve como roteiro de estudo e plano de aula. |
 
-Quando dizemos `class Aluno`, estamos descrevendo que todo aluno do nosso sistema tera certas informacoes e certos comportamentos.
+## 4. Modelo Conceitual
 
-No projeto, a classe `Aluno` possui:
+Antes de abrir o código, apresente aos alunos o modelo mental da solução.
 
-- `nome`: representa o nome do aluno.
-- `matricula`: representa a identificacao academica.
-- `notas`: representa as notas registradas.
+```text
+Aluno
+├── Dados
+│   ├── nome
+│   ├── matrícula
+│   └── notas
+└── Comportamentos
+    ├── registrarNota()
+    ├── calcularMedia()
+    └── estaAprovado()
+```
 
-Esses dados sao chamados de **atributos**.
+Em orientação a objetos, uma classe não deve ser apenas um agrupamento de variáveis. Ela deve representar uma ideia do domínio e proteger as regras relacionadas a essa ideia.
 
-## 2. O que e um objeto?
+Neste exemplo, `Aluno` não é só uma estrutura de dados. `Aluno` é uma pequena unidade de domínio do sistema acadêmico.
 
-Um objeto e uma instancia concreta da classe.
+## 5. Conceitos Fundamentais
 
-Exemplo:
+### Classe
+
+Classe é o molde que descreve quais dados e comportamentos um objeto terá.
+
+No projeto:
+
+```java
+public class Aluno {
+    ...
+}
+```
+
+A classe `Aluno` define o que todo aluno do sistema possui e o que ele consegue fazer.
+
+### Objeto
+
+Objeto é uma instância concreta de uma classe.
 
 ```java
 Aluno aluno = new Aluno("Ana Maria", "CC2026001");
 ```
 
-Aqui, `Aluno` e a classe. Ja `aluno` e o objeto criado na memoria.
+Nesse exemplo:
 
-Uma analogia simples:
+- `Aluno` é a classe.
+- `aluno` é o objeto.
+- `new Aluno(...)` cria uma nova instância em memória.
 
-- Classe: planta arquitetonica de uma casa.
-- Objeto: casa construida a partir daquela planta.
+### Atributos
 
-Na disciplina de Arquitetura de Sistemas, essa ideia e importante porque sistemas bem organizados nascem de modelos claros.
-
-## 3. A classe `Aluno`
-
-Arquivo: `src/main/java/br/edu/exemplo/Aluno.java`
+Atributos representam o estado interno do objeto.
 
 ```java
 private final String nome;
@@ -80,25 +146,47 @@ private final String matricula;
 private final List<Double> notas;
 ```
 
-Esses campos sao `private`, ou seja, nao podem ser acessados diretamente por outras classes.
+Esses atributos indicam que um aluno possui nome, matrícula e notas.
 
-Isso e **encapsulamento**.
+### Métodos
 
-### Por que encapsular?
+Métodos representam comportamentos.
 
-Imagine que qualquer parte do sistema pudesse alterar as notas diretamente. Seria facil colocar uma nota invalida, como `-5` ou `20`.
+```java
+public void registrarNota(double nota)
+public double calcularMedia()
+public boolean estaAprovado()
+```
 
-Ao encapsular, a classe `Aluno` protege seus proprios dados e obriga o restante do sistema a usar metodos controlados, como:
+Cada método responde a uma ação relevante do domínio acadêmico.
+
+### Encapsulamento
+
+Encapsulamento é a prática de proteger os dados internos da classe e controlar o acesso por meio de métodos.
+
+No projeto, os atributos são `private`, o que impede que outras classes alterem diretamente o estado interno do aluno.
+
+Isso evita situações como:
+
+```java
+aluno.notas.add(50.0);
+```
+
+Uma nota `50.0` não é válida. Portanto, a alteração precisa passar por um método que valide a regra:
 
 ```java
 aluno.registrarNota(8.5);
 ```
 
-Assim, antes de salvar a nota, o metodo verifica se ela esta entre `0.0` e `10.0`.
+Esse é um ponto arquitetural importante: regras de negócio devem ficar próximas dos dados que elas protegem.
 
-## 4. Construtor
+## 6. Análise da Classe `Aluno`
 
-O construtor e executado quando criamos um objeto.
+Arquivo: `src/main/java/br/edu/exemplo/Aluno.java`
+
+### Construtor
+
+O construtor cria um objeto em estado válido.
 
 ```java
 public Aluno(String nome, String matricula) {
@@ -116,17 +204,21 @@ public Aluno(String nome, String matricula) {
 }
 ```
 
-Ponto importante para os alunos:
+Discussão em sala:
 
-O construtor garante que um objeto `Aluno` ja nasca em um estado valido.
+- Um aluno sem nome é válido no sistema?
+- Um aluno sem matrícula deveria existir?
+- O que acontece quando deixamos qualquer parte do sistema criar objetos inválidos?
 
-Um aluno sem nome ou sem matricula nao faz sentido para o sistema, entao a classe impede essa criacao.
+Conclusão esperada:
 
-## 5. Metodo `registrarNota`
+O construtor protege a integridade inicial do objeto.
+
+### Registro de nota
 
 ```java
 public void registrarNota(double nota) {
-    if (nota < 0.0 || nota > 10.0) {
+    if (nota < NOTA_MINIMA || nota > NOTA_MAXIMA) {
         throw new IllegalArgumentException("A nota deve estar entre 0.0 e 10.0.");
     }
 
@@ -134,15 +226,18 @@ public void registrarNota(double nota) {
 }
 ```
 
-Esse metodo representa um comportamento do aluno dentro do sistema.
+Esse método possui duas responsabilidades importantes:
 
-Ele nao apenas adiciona uma nota. Ele tambem protege a regra de negocio:
+- Validar a entrada.
+- Registrar a nota quando ela for válida.
 
-> Uma nota valida deve estar entre 0 e 10.
+Esse método demonstra uma regra de negócio simples:
 
-Em arquitetura de sistemas, isso e uma decisao importante: a regra fica perto do dado que ela protege.
+```text
+Uma nota válida deve estar entre 0.0 e 10.0.
+```
 
-## 6. Metodo `calcularMedia`
+### Cálculo de média
 
 ```java
 public double calcularMedia() {
@@ -160,34 +255,33 @@ public double calcularMedia() {
 }
 ```
 
-Esse metodo percorre as notas, soma os valores e divide pela quantidade de notas.
+Esse método mostra uma operação derivada do estado interno do objeto.
 
-Se nao houver nota registrada, a media sera `0.0`.
+A média não fica armazenada como atributo. Ela é calculada a partir das notas registradas.
 
-## 7. Metodo `estaAprovado`
+### Verificação de aprovação
 
 ```java
 public boolean estaAprovado() {
-    return calcularMedia() >= 7.0;
+    return calcularMedia() >= MEDIA_PARA_APROVACAO;
 }
 ```
 
-Aqui aparece uma regra de negocio simples:
+Aqui aparece uma regra de decisão:
 
-Um aluno esta aprovado quando sua media e maior ou igual a `7.0`.
+```text
+Aluno aprovado = média maior ou igual a 7.0.
+```
 
-Esse metodo retorna um valor booleano:
+Essa regra está dentro da classe `Aluno` porque pertence ao comportamento do aluno no contexto acadêmico.
 
-- `true`: aprovado.
-- `false`: reprovado.
+## 7. Logs de Execução
 
-## 8. Logs no console
+O projeto utiliza `System.out.println` com marcadores como `[LOG]`, `[INFO]` e `[TESTE]`.
 
-O projeto usa `System.out.println` com prefixos como `[LOG]`, `[INFO]` e `[TESTE]`.
+Em sistemas profissionais, é comum usar bibliotecas como Logback, Log4j ou SLF4J. Neste projeto, o uso de `System.out.println` é propositalmente didático: ele ajuda o aluno iniciante a visualizar a sequência de execução.
 
-Em projetos profissionais, normalmente usamos bibliotecas de log, como Logback ou Log4j. Para uma primeira aula de orientacao a objetos, `System.out.println` ajuda porque deixa o fluxo do programa visivel.
-
-Exemplo de saida esperada ao executar a aplicacao:
+Exemplo esperado ao executar a aplicação:
 
 ```text
 [LOG] Iniciando demonstracao da classe Aluno.
@@ -202,88 +296,290 @@ Exemplo de saida esperada ao executar a aplicacao:
 [LOG] Notas: [8.5, 7.0, 9.0]
 [INFO] Media calculada para Ana Maria: 8.166666666666666
 [LOG] Media final: 8.166666666666666
-[INFO] Media calculada para Ana Maria: 8.166666666666666
 [INFO] Situacao de Ana Maria: APROVADO
 [LOG] Aprovado? true
 [LOG] Demonstracao finalizada.
 ```
 
-## 9. Testes unitarios com JUnit
+Ponto para enfatizar:
+
+Logs ajudam a entender o fluxo de execução, mas não substituem testes automatizados.
+
+## 8. Testes Unitários com JUnit
 
 Arquivo: `src/test/java/br/edu/exemplo/AlunoTest.java`
 
-Um teste unitario verifica se uma pequena parte do sistema funciona corretamente.
+Um teste unitário verifica uma pequena unidade do sistema. Neste projeto, a unidade testada é a classe `Aluno`.
 
-Neste projeto, os testes verificam se:
+Os testes verificam:
 
-- O aluno e criado com nome e matricula.
-- Notas validas sao registradas.
-- A media e calculada corretamente.
-- O aluno e aprovado com media maior ou igual a 7.
-- O aluno e reprovado com media menor que 7.
-- Notas menores que 0 nao sao aceitas.
-- Notas maiores que 10 nao sao aceitas.
-- Um aluno sem nome nao pode ser criado.
+- Criação de aluno com nome e matrícula.
+- Registro de notas válidas.
+- Cálculo correto da média.
+- Aprovação com média maior ou igual a 7.
+- Reprovação com média menor que 7.
+- Rejeição de nota menor que zero.
+- Rejeição de nota maior que dez.
+- Rejeição de aluno sem nome.
 
-### Padrao mental: Arrange, Act, Assert
+### Padrão Arrange, Act e Assert
 
-Mesmo quando nao escrevemos esses nomes no codigo, muitos testes seguem tres momentos:
+Os testes estão comentados usando o padrão **Arrange, Act e Assert**.
 
-- **Arrange**: preparar os dados.
-- **Act**: executar o comportamento testado.
-- **Assert**: verificar o resultado.
+| Etapa | Significado | Pergunta que o aluno deve fazer |
+| --- | --- | --- |
+| Arrange | Preparar o cenário do teste. | Quais dados e objetos preciso preparar? |
+| Act | Executar o comportamento testado. | Qual ação estou testando? |
+| Assert | Verificar o resultado. | O resultado obtido é o esperado? |
 
-Exemplo:
+Exemplo didático:
 
 ```java
+// Arrange: registramos notas conhecidas para que a media esperada seja previsivel.
 aluno.registrarNota(6.0);
 aluno.registrarNota(8.0);
 aluno.registrarNota(10.0);
 
-assertEquals(8.0, aluno.calcularMedia());
+// Act: chamamos o metodo que calcula a media do aluno.
+double media = aluno.calcularMedia();
+
+// Assert: comparamos a media calculada com o resultado esperado.
+assertEquals(8.0, media);
 ```
 
-Neste teste:
+Esse padrão torna o teste mais legível e facilita a manutenção.
 
-- Preparamos tres notas.
-- Chamamos `calcularMedia`.
-- Verificamos se o resultado foi `8.0`.
+## 9. Como Executar o Projeto
 
-## 10. Como executar
-
-Para compilar e executar os testes, use:
+### Executar os testes
 
 ```bash
 mvn test
 ```
 
-Para executar a classe principal:
+### Executar a aplicação principal
 
 ```bash
 mvn compile exec:java
 ```
 
-Uma alternativa simples e executar pela IDE, clicando no metodo `main` da classe `App`.
+### Executar pela IDE
 
-## 11. Roteiro sugerido para explicar em sala
+Também é possível executar diretamente pela IDE:
 
-1. Mostre primeiro a classe `Aluno`.
-2. Pergunte aos alunos quais informacoes um aluno precisa ter.
-3. Relacione as respostas com os atributos `nome`, `matricula` e `notas`.
-4. Explique que os atributos estao privados para proteger o estado interno.
-5. Mostre o construtor e explique que ele cria objetos validos.
-6. Mostre `registrarNota` e destaque a validacao.
-7. Execute a classe `App` e leia os logs com a turma.
-8. Abra os testes JUnit e explique que eles documentam o comportamento esperado.
-9. Rode `mvn test` e mostre que os testes funcionam como uma rede de seguranca.
-10. Altere uma regra de proposito, como a media para `8.0`, e mostre quais testes quebram.
+- Abra o arquivo `App.java`.
+- Localize o método `main`.
+- Clique em executar.
 
-## 12. Mensagem final para os alunos
+Para os testes:
 
-Orientacao a objetos nao e apenas escrever `class`.
+- Abra o arquivo `AlunoTest.java`.
+- Execute a classe de teste ou cada método individualmente.
 
-Orientacao a objetos e organizar responsabilidades.
+## 10. Plano de Aula Sugerido
 
-Neste exemplo, a classe `Aluno` e responsavel por guardar os dados de um aluno e proteger as regras relacionadas a esses dados. O teste JUnit, por sua vez, confirma que essa responsabilidade esta sendo cumprida.
+### Duração recomendada
 
-Esse e o inicio do pensamento arquitetural: cada parte do sistema deve ter um papel claro, pequeno e verificavel.
+Entre 80 e 100 minutos.
+
+### Parte 1: Contextualização do problema
+
+Tempo sugerido: 10 minutos.
+
+Condução:
+
+- Pergunte aos alunos quais dados um sistema acadêmico precisa guardar sobre um aluno.
+- Anote respostas como nome, matrícula e notas.
+- Mostre que esses elementos se transformam em atributos.
+- Pergunte quais ações esse aluno deve realizar no sistema.
+- Relacione as respostas com métodos.
+
+Objetivo pedagógico:
+
+Fazer o aluno perceber que código orientado a objetos nasce da modelagem de um problema real.
+
+### Parte 2: Construção da classe
+
+Tempo sugerido: 20 minutos.
+
+Condução:
+
+- Abra `Aluno.java`.
+- Explique atributos privados.
+- Explique o construtor.
+- Mostre as validações de nome e matrícula.
+- Mostre a lista de notas.
+
+Perguntas para a turma:
+
+- Por que os atributos não estão públicos?
+- O que poderia dar errado se a lista de notas fosse livremente alterada?
+- Por que o construtor valida os dados?
+
+Objetivo pedagógico:
+
+Relacionar encapsulamento com integridade do objeto.
+
+### Parte 3: Regras de negócio
+
+Tempo sugerido: 20 minutos.
+
+Condução:
+
+- Explique `registrarNota`.
+- Explique `calcularMedia`.
+- Explique `estaAprovado`.
+- Mostre que cada método representa uma responsabilidade pequena.
+
+Pontos de arquitetura:
+
+- Regra de nota válida pertence ao aluno neste exemplo.
+- Média é calculada a partir do estado interno.
+- Aprovação é uma decisão de negócio.
+- Métodos pequenos são mais fáceis de testar.
+
+Objetivo pedagógico:
+
+Mostrar que arquitetura começa nas pequenas decisões de código.
+
+### Parte 4: Execução e logs
+
+Tempo sugerido: 10 minutos.
+
+Condução:
+
+- Execute `App.java`.
+- Leia os logs com a turma.
+- Mostre a ordem dos eventos.
+- Relacione cada log com uma chamada de método.
+
+Objetivo pedagógico:
+
+Fazer o aluno visualizar o fluxo de execução de um objeto.
+
+### Parte 5: Testes unitários
+
+Tempo sugerido: 25 minutos.
+
+Condução:
+
+- Abra `AlunoTest.java`.
+- Explique o papel do `@BeforeEach`.
+- Mostre cada teste.
+- Destaque os comentários de Arrange, Act e Assert.
+- Execute os testes.
+
+Perguntas para a turma:
+
+- Qual comportamento este teste está verificando?
+- Qual é o cenário preparado?
+- Qual método está sendo executado?
+- O que está sendo confirmado no `assert`?
+
+Objetivo pedagógico:
+
+Mostrar que testes são documentação executável do comportamento do sistema.
+
+### Parte 6: Experimento controlado
+
+Tempo sugerido: 10 minutos.
+
+Atividade:
+
+Altere temporariamente a regra de aprovação de `7.0` para `8.0`.
+
+Depois, execute os testes novamente.
+
+Discussão:
+
+- Qual teste falhou?
+- Por que falhou?
+- O teste encontrou um erro ou uma mudança de regra?
+- Se a regra mudou de verdade, quais testes precisam ser atualizados?
+
+Objetivo pedagógico:
+
+Mostrar que testes protegem o comportamento esperado, mas também precisam acompanhar mudanças legítimas de regra.
+
+## 11. Erros Comuns dos Alunos
+
+### Confundir classe com objeto
+
+Correção conceitual:
+
+- Classe é o modelo.
+- Objeto é a instância criada a partir do modelo.
+
+### Colocar todos os atributos como `public`
+
+Correção conceitual:
+
+Atributos públicos enfraquecem o encapsulamento e permitem alterações inválidas no estado interno.
+
+### Testar apenas o caso feliz
+
+Correção conceitual:
+
+Bons testes também cobrem erros esperados, como nota negativa, nota maior que dez e nome vazio.
+
+### Achar que log é teste
+
+Correção conceitual:
+
+Log mostra o que aconteceu. Teste verifica automaticamente se o que aconteceu está correto.
+
+### Não separar Arrange, Act e Assert
+
+Correção conceitual:
+
+Testes desorganizados ficam difíceis de ler, explicar e manter.
+
+## 12. Exercícios Propostos
+
+### Exercício 1: Validar matrícula vazia
+
+Crie um teste para garantir que não seja possível criar um aluno com matrícula vazia.
+
+### Exercício 2: Média sem notas
+
+Crie um teste para verificar que um aluno sem notas possui média `0.0`.
+
+### Exercício 3: Média mínima configurável
+
+Altere a média de aprovação para `6.0` e atualize os testes.
+
+### Exercício 4: Situação textual
+
+Crie um método `obterSituacao()` que retorne:
+
+- `"APROVADO"` quando o aluno estiver aprovado.
+- `"REPROVADO"` quando o aluno estiver reprovado.
+
+Depois, crie testes para esse novo método.
+
+### Exercício 5: Refatoração de logs
+
+Pesquise uma biblioteca de log profissional para Java e discuta como ela poderia substituir `System.out.println`.
+
+## 13. Critérios de Avaliação
+
+Uma solução satisfatória deve apresentar:
+
+- Classe com responsabilidade clara.
+- Atributos privados.
+- Construtor com validação.
+- Métodos pequenos e compreensíveis.
+- Regras de negócio testáveis.
+- Testes para cenários válidos e inválidos.
+- Comentários úteis nos testes.
+- Uso correto de Arrange, Act e Assert.
+
+## 14. Fechamento da Aula
+
+Orientação a objetos não é apenas escrever `class`.
+
+Orientação a objetos é distribuir responsabilidades de forma clara.
+
+Neste projeto, a classe `Aluno` concentra dados e comportamentos relacionados ao aluno. Os testes JUnit documentam e verificam esse comportamento. Os logs ajudam a observar a execução. A arquitetura aparece justamente nessa organização: cada parte do sistema tem um papel compreensível, verificável e evolutivo.
+
+Essa é uma base simples, mas poderosa, para construir sistemas maiores com mais qualidade.
